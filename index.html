@@ -201,7 +201,8 @@ const CASES = [
    "資料庫欄位隨需求逐步擴充（IG → 課程/文章 → 驗證狀態），「一庫多檢視」vs「拆多表」的取捨",
    "AI 讀不到 IG 內容是預期限制：狀態標「待整理」照樣入庫，不編造"
   ],
-  links:[["完整過程記錄（Notion）","https://app.notion.com/p/39230727f52581f9b8e3f573cc7bc84f"],["案例教材原始檔","cases/ig-resource-organizer.md"]],
+  links:[],
+  note:"完整過程記錄與資料庫在 Notion（私人頁面，未公開分享）",
   prompt:`（貼上連結）這個是講〔主題〕的，我覺得重點是〔你順口想到的點，很口語沒關係〕。幫我收進資源庫：讀懂我的說明整理成重點摘要，再試著讀連結內容補充細節；讀不到就老實標「待驗證」，狀態填「待整理」先入庫。`
  },
  {
@@ -306,6 +307,7 @@ function render() {
     let detail = "";
     if ((c.lessons||[]).length) detail += `<ul class="lessons">${c.lessons.map(l=>`<li>${l}</li>`).join("")}</ul>`;
     if ((c.links||[]).length) detail += `<div class="meta">${c.links.map(([t,u])=>`<a href="${u}" target="_blank">🔗 ${t}</a>`).join("　")}</div>`;
+    if (c.note) detail += `<div class="meta">🔒 ${c.note}</div>`;
     if (c.prompt) detail += `<div class="prompt">${c.prompt.replace(/</g,"&lt;")}</div><button class="copy">📋 複製 prompt</button>`;
     const hasDetail = detail !== "";
     card.innerHTML = `

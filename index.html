@@ -25,9 +25,9 @@
   .chip { border:1px solid #2a3a5c; background:#111726; color:#c5d0e6; border-radius:999px; padding:5px 14px; font-size:13px; cursor:pointer; user-select:none; transition:all .15s; }
   .chip:hover { border-color:#4f7cff; }
   .chip.on { background:#1e3a75; color:#fff; border-color:#4f7cff; }
-  #q { flex:1 1 200px; min-width:160px; border:1px solid #2a3a5c; background:#111726; color:#dbe2f0; border-radius:999px; padding:6px 16px; font-size:13.5px; outline:none; }
-  #q::placeholder { color:#5a6a88; }
-  #q:focus { border-color:#4f7cff; }
+  #q, #cq { flex:1 1 200px; min-width:160px; border:1px solid #2a3a5c; background:#111726; color:#dbe2f0; border-radius:999px; padding:6px 16px; font-size:13.5px; outline:none; }
+  #q::placeholder, #cq::placeholder { color:#5a6a88; }
+  #q:focus, #cq:focus { border-color:#4f7cff; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; }
   .card { background:#121a2c; border:1px solid #1f2c48; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; transition:border-color .15s; }
   .card:hover { border-color:#33507f; }
@@ -80,6 +80,7 @@
 
   <div class="tabs">
     <span class="tab on" data-t="cases">📂 案例庫</span>
+    <span class="tab" data-t="collect">🧰 收集箱</span>
     <span class="tab" data-t="guide">🧭 協作心法</span>
   </div>
 
@@ -93,6 +94,18 @@
     </div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty">沒有符合的案例</div>
+  </div>
+
+  <div id="tab-collect" style="display:none">
+    <div class="gintro">
+      從網路上收集來的別人做的好東西——Skill、Agent、案例、教學。每筆都附原始出處；有 prompt 或指令的可以直接複製。完整收藏在 SS 的私人 Notion 資料庫，這裡是精選公開版。
+    </div>
+    <div class="bar" id="ctypes"></div>
+    <div class="bar">
+      <input id="cq" type="search" placeholder="搜尋 Skill、Agent、案例、作者…">
+    </div>
+    <div class="grid" id="cgrid"></div>
+    <div class="empty" id="cempty">沒有符合的收集</div>
   </div>
 
   <div id="tab-guide" style="display:none">
@@ -278,6 +291,65 @@ const CASES = [
  }
 ];
 
+// ====== 收集箱：別人的好用 Skill / Agent / 案例 / 教學，往這裡加 ======
+// type: Skill | Agent | 案例 | 教學
+const COLLECT = [
+ {
+  type:"Skill", title:"Anthropic 官方 Skills 資源庫",
+  desc:"官方開源的 Skills 集合：docx / pptx / xlsx / pdf 文件處理、skill-creator（做自己的 skill）等，裝進 Claude Code 就能用。想學「Skill 該怎麼寫」直接看官方原始碼最快。",
+  author:"Anthropic", url:"https://github.com/anthropics/skills",
+  prompt:``
+ },
+ {
+  type:"案例", title:"等時圈旅行時間地圖（Mollick 招牌測試）",
+  desc:"讓 AI 自主派子代理查 2,200+ 航班與鐵路時刻，邊研究邊寫碼邊驗證，數小時交付互動地圖。是「交辦一整件事而不是一個指令」的代表案例。",
+  author:"Ethan Mollick（One Useful Thing）", url:"https://www.oneusefulthing.org/p/what-it-feels-like-to-work-with-mythos",
+  prompt:`i want you to build a fully researched and beautiful isochronic map that lets me pick various cities and see real isochronic lines based on real data. I want the design to be unique. You should take into account airports (and travel time to and from airports) trains, walking, driving. The data does not need to be live but should be real based on your research and data. You can start with a few cities but more general is better, this should be an entirely new project.`
+ },
+ {
+  type:"案例", title:"機械錶模擬：視覺自我驗證迴圈",
+  desc:"Three.js 做出真實齒輪比的機械錶。精髓在 prompt 設計：要求 AI 蓋一套相機系統、用視覺能力逐零件檢查、迴圈到 100% 滿意——「驗證迴圈」寫進 prompt 的範本。",
+  author:"@quanghuynt14（X）", url:"https://x.com/quanghuynt14/status/2064509430650065278",
+  prompt:`/goal Build the most realistic mechanical watch movement in Three.js — visible gears, escapement, balance wheel, all animated and mechanically coherent (gear ratios must actually make the hands tell real time). Build a camera system to inspect it from every angle and zoom level, use your vision capabilities to verify each part, and loop until you are 100% satisfied. Save a screenshot of every iteration to ./iterations/ so I can make a time-lapse.`
+ },
+ {
+  type:"案例", title:"McKinsey 等級報告複製",
+  desc:"上傳一份顧問報告當品質基準，要求 AI 做出同等品質的新主題文件。發布日最瘋傳的案例之一，拿來升級自己的營運報告很實用。",
+  author:"@rileybrown（X）", url:"https://x.com/rileybrown/status/2064407515752722521",
+  prompt:`(附上一份高品質報告 PDF)\n\nCreate a brand-new document of the same quality on [你的主題]: same analytical depth, same chart quality, same layout polish and visual language. Research the topic properly before writing. Deliver as a polished HTML report I can print to PDF.`
+ },
+ {
+  type:"案例", title:"awesome-claude-fable-5 案例合集",
+  desc:"GitHub 上持續更新的 Fable 5 案例、教學、整合與 benchmark 合集，附來源連結。找靈感的起點。",
+  author:"Anil-matcha（GitHub）", url:"https://github.com/Anil-matcha/awesome-claude-fable-5",
+  prompt:``
+ },
+ {
+  type:"教學", title:"Boris Cherny：每天在用的 15 個 Claude Code 功能",
+  desc:"Claude Code 創始者親自示範日常工作流：排程自動化（Routines）、語音寫程式等。想知道「工具作者自己怎麼用」看這篇。",
+  author:"INSIDE（中文報導）", url:"https://www.inside.com.tw/article/40974-claude-code-boris-cherny-hidden-features-voice-scheduling-workflow-2026",
+  prompt:``
+ },
+ {
+  type:"教學", title:"Claude Code 官方提示詞資源庫",
+  desc:"官方整理的五十多則指令範本，從規劃到自動化一頁涵蓋。寫 prompt 卡住的時候先來這裡抄。",
+  author:"INSIDE（中文報導）", url:"https://www.inside.com.tw/article/41726-claude-code-prompt-library",
+  prompt:``
+ },
+ {
+  type:"教學", title:"Claude Code 業務自動化 10 事例（日文）",
+  desc:"議事錄自動化、週報製作等 10 個辦公自動化實例，附實作 prompt 全公開。非工程背景也能照做，跟 SolsLab 的自動化路線最對味。",
+  author:"株式会社Uravation", url:"https://uravation.com/media/claude-code-automation-case-studies-2026/",
+  prompt:``
+ },
+ {
+  type:"Agent", title:"驗證用子代理：讓別的 AI 檢查工作",
+  desc:"長跑任務把「驗證」交給獨立的子代理，勝過讓 AI 自己檢查自己（self-critique）。一句 prompt 就能啟用的模式。",
+  author:"官方 Prompting 指南歸納", url:"https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5",
+  prompt:`Establish a method for checking your own work at an interval of [X] as you build. Run this every [X interval], verifying your work with subagents against the specification. Delegate independent subtasks to subagents and keep working while they run.`
+ }
+];
+
 // ====== 以下是渲染邏輯，通常不用動 ======
 const CAT_COLORS = {
   "資訊整理":"#6ea8ff",
@@ -332,7 +404,47 @@ function render() {
   document.getElementById("empty").style.display = shown ? "none" : "block";
   const full = CASES.filter(c=>c.status==="完整教材").length;
   const live = CASES.filter(c=>c.status==="營運中").length;
-  document.getElementById("stats").textContent = `共 ${CASES.length} 個專案案例 · ${full} 個完整教材 · ${live} 個營運中`;
+  document.getElementById("stats").textContent = `共 ${CASES.length} 個專案案例 · ${full} 個完整教材 · ${live} 個營運中 · 收集箱 ${COLLECT.length} 筆`;
+}
+
+// ====== 收集箱渲染 ======
+const TYPE_COLORS = { "Skill":"#5fd39a", "Agent":"#b48cff", "案例":"#6ea8ff", "教學":"#e0b45c" };
+let curType = "all", curCQ = "";
+
+function renderCollect() {
+  const grid = document.getElementById("cgrid");
+  grid.innerHTML = "";
+  let shown = 0;
+  COLLECT.forEach(c => {
+    if (curType !== "all" && c.type !== curType) return;
+    const hay = (c.title + c.desc + c.type + c.author).toLowerCase();
+    if (curCQ && !hay.includes(curCQ)) return;
+    shown++;
+    const color = TYPE_COLORS[c.type] || "#6ea8ff";
+    const card = document.createElement("div");
+    card.className = "card";
+    let detail = "";
+    if (c.prompt) detail += `<div class="prompt">${c.prompt.replace(/</g,"&lt;")}</div><button class="copy">📋 複製 prompt</button>`;
+    card.innerHTML = `
+      <div class="stripe" style="background:${color}"></div>
+      <div class="body">
+        <div class="cat" style="color:${color}">${c.type}</div>
+        <h3>${c.title}</h3>
+        <div class="desc">${c.desc}</div>
+        <div class="meta">✍️ ${c.author}　<a href="${c.url}" target="_blank">🔗 原始出處</a></div>
+        ${detail ? `<span class="ptoggle">▸ 展開 prompt</span><div class="detail">${detail}</div>` : ``}
+      </div>`;
+    if (detail) {
+      card.querySelector(".ptoggle").addEventListener("click", () => {
+        card.classList.toggle("open");
+        card.querySelector(".ptoggle").textContent = card.classList.contains("open") ? "▾ 收合" : "▸ 展開 prompt";
+      });
+      const cp = card.querySelector(".copy");
+      if (cp) cp.addEventListener("click", () => copyText(cp, c.prompt));
+    }
+    grid.appendChild(card);
+  });
+  document.getElementById("cempty").style.display = shown ? "none" : "block";
 }
 
 function copyText(btn, text) {
@@ -378,13 +490,38 @@ document.getElementById("q").addEventListener("input", e => {
   render();
 });
 
+// 收集箱類型 chips
+(function(){
+  const types = ["all", ...new Set(COLLECT.map(c=>c.type))];
+  const bar = document.getElementById("ctypes");
+  types.forEach(t => {
+    const el = document.createElement("span");
+    el.className = "chip" + (t==="all" ? " on" : "");
+    el.textContent = t==="all" ? "全部類型" : t;
+    el.addEventListener("click", () => {
+      curType = t;
+      bar.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+      el.classList.add("on");
+      renderCollect();
+    });
+    bar.appendChild(el);
+  });
+})();
+
+// 收集箱搜尋
+document.getElementById("cq").addEventListener("input", e => {
+  curCQ = e.target.value.trim().toLowerCase();
+  renderCollect();
+});
+
 // 分頁
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
     tab.classList.add("on");
-    document.getElementById("tab-cases").style.display = tab.dataset.t==="cases" ? "" : "none";
-    document.getElementById("tab-guide").style.display = tab.dataset.t==="guide" ? "" : "none";
+    ["cases","collect","guide"].forEach(t => {
+      document.getElementById("tab-"+t).style.display = tab.dataset.t===t ? "" : "none";
+    });
   });
 });
 
@@ -410,6 +547,7 @@ document.querySelectorAll(".gcopy").forEach(btn => {
 });
 
 render();
+renderCollect();
 </script>
 </body>
 </html>

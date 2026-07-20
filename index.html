@@ -122,7 +122,7 @@
 
   <div id="tab-course">
     <div class="cintro">
-      給第一次接觸 AI 的新手：怎麼用 AI／Claude 幫自己建一套「<b>個人 AI 作業系統</b>」。重點不是把整套系統一次蓋出來，而是<b>把重複做的事固定成一套流程</b>，讓任何 AI 模型都能接手執行。往下讀是一條線：先看懂全貌 → 為什麼這樣做 → 怎麼開始 → 逐層拆解 → 東西放哪 → 最重要的心態。
+      給第一次接觸 AI 的新手：怎麼用 AI／Claude 幫自己建一套「<b>個人 AI 作業系統</b>」。重點不是把整套系統一次蓋出來，而是<b>把重複做的事固定成一套流程</b>，讓任何 AI 模型都能接手執行。往下讀是一條線：看懂全貌 → 為什麼這樣做 → 名詞速查 → 怎麼開始 → 逐層拆解 → 走一遍例子 → 東西放哪 → 常踩的坑 → 最重要的心態。
     </div>
 
     <div class="formula-box">
@@ -145,7 +145,23 @@
     </div>
 
     <hr class="cdiv">
-    <div class="csec"><h2>🚀 二、怎麼開始：新手 5 步驟</h2>
+    <div class="csec"><h2>📖 二、名詞速查：先搞懂這幾個詞</h2>
+      <div class="sub">整套系統會反覆出現這幾個詞。這裡一句話講清楚，後面看到就不卡。</div>
+    </div>
+    <div class="cgrid3">
+      <div class="icard"><div class="t">Model 模型</div><div class="d">AI 的「大腦本體」，例如 Claude、ChatGPT。你所有指令最後都是這顆大腦在回應。</div></div>
+      <div class="icard"><div class="t">Prompt 提示詞</div><div class="d">你對 AI 講的話／下的指令。同一顆大腦，Prompt 寫得好不好，結果差很多。</div></div>
+      <div class="icard"><div class="t">Token 詞元</div><div class="d">AI 計算與收費的最小單位，約等於「幾個字」。對話太長會吃很多 Token，也是成本來源。</div></div>
+      <div class="icard"><div class="t">Project 角色設定</div><div class="d">給 AI 的長期背景與人設，設定一次長期沿用，不用每次對話重講。</div></div>
+      <div class="icard"><div class="t">Skill 能力模組</div><div class="d">把一件常做的事寫成固定 SOP，之後呼叫就能穩定重現，不用每次重教。</div></div>
+      <div class="icard"><div class="t">MCP 工具接口</div><div class="d">讓 AI 能操作外部系統（Sheet、GitHub、Telegram）的標準接頭，從「會講」變「會做」。</div></div>
+      <div class="icard"><div class="t">Workflow 流程</div><div class="d">把 Skill 和工具串成「觸發 → 執行 → 輸出」固定會跑的自動化流程。</div></div>
+      <div class="icard"><div class="t">Agent 代理／員工</div><div class="d">以上全部湊齊、能在設定範圍內自己完成一件完整工作的 AI，就叫一個 Agent。</div></div>
+      <div class="icard"><div class="t">API 應用接口</div><div class="d">系統之間互相呼叫的「櫃檯」。MCP 底層很多也是透過各家服務的 API 在運作。</div></div>
+    </div>
+
+    <hr class="cdiv">
+    <div class="csec"><h2>🚀 三、怎麼開始：新手 5 步驟</h2>
       <div class="sub">理念懂了，這裡是最小可行的起手式。照順序做一輪，你就有了第一個會自己做事的 Agent——不用一次到位。</div>
     </div>
     <div class="steplist">
@@ -157,7 +173,7 @@
     </div>
 
     <hr class="cdiv">
-    <div class="csec"><h2>🏗️ 三、逐層拆解：六層架構</h2>
+    <div class="csec"><h2>🏗️ 四、逐層拆解：六層架構</h2>
       <div class="sub">回到開頭那條公式，把六個零件一個一個攤開看——每一層是什麼、拿來幹嘛、長什麼樣。</div>
     </div>
     <div class="cgrid3">
@@ -170,7 +186,20 @@
     </div>
 
     <hr class="cdiv">
-    <div class="csec"><h2>📚 四、東西放哪：知識庫怎麼選</h2>
+    <div class="csec"><h2>🧑‍🍳 五、走一遍：用一個例子把六層串起來</h2>
+      <div class="sub">光看架構還是抽象。這裡用一個誰都用得到的例子——「做一個每天早上幫你整理產業新聞的助手」——把公式六個零件實際填一次。這一段就是前面所有觀念的合體。</div>
+    </div>
+    <div class="steplist">
+      <div class="cstep"><div class="cstep-num">🧠</div><div><h4>Model：先挑大腦</h4><p>選 Claude 或 ChatGPT 其中一個。這個例子選 Claude，之後不滿意隨時可換，不影響底下的設定。</p></div></div>
+      <div class="cstep"><div class="cstep-num">🎭</div><div><h4>Project：給它角色</h4><p>設定「你是我的產業新聞助理，語氣精簡、只講重點、用繁體中文」。這段話存起來，每天都套用。</p></div></div>
+      <div class="cstep"><div class="cstep-num">🧩</div><div><h4>Skill：把篩選標準寫成 SOP</h4><p>寫一份「新聞怎麼挑、怎麼摘要」的規則：只留 5 則、每則兩句、附連結、標重要度。這就是可重用的能力。</p></div></div>
+      <div class="cstep"><div class="cstep-num">🔌</div><div><h4>MCP：接上來源與出口</h4><p>接上 RSS／新聞來源當「進料」，接上 Email 或 Telegram 當「出貨口」，讓 AI 真的拿得到新聞、也送得出去。</p></div></div>
+      <div class="cstep"><div class="cstep-num">🔄</div><div><h4>Workflow：串成每天自動跑</h4><p>設定「每天 07:00 觸發 → 抓新聞 → 套 Skill 摘要 → 寄到信箱」。到這裡，它已經會自己做事了。</p></div></div>
+      <div class="cstep"><div class="cstep-num">🤖</div><div><h4>Agent：這就是一個 Agent</h4><p>六個零件湊齊，你就有了一個「新聞助理 Agent」。哪天想換大腦、加一條篩選規則，改對應那一層就好，其他不動。</p></div></div>
+    </div>
+
+    <hr class="cdiv">
+    <div class="csec"><h2>📚 六、東西放哪：知識庫怎麼選</h2>
       <div class="sub">Skill、知識、資料要有個家。三種工具各有分工，不是二選一，是搭配用。</div>
     </div>
     <div class="cgrid3">
@@ -192,7 +221,21 @@
     <div class="treenote">這是 Obsidian Vault 的建議起點——不用一次把資料夾生齊，用到再建，命名也可以照你原本習慣調整。</div>
 
     <hr class="cdiv">
-    <div class="csec"><h2>💡 五、最重要的一課：心態</h2></div>
+    <div class="csec"><h2>⚠️ 七、新手最常踩的 5 個坑</h2>
+      <div class="sub">這些不是進階問題，是幾乎每個人一開始都會犯、之後都會後悔的。先知道，就能繞過。</div>
+    </div>
+    <div class="cgrid3">
+      <div class="icard"><div class="t">1 一開始就想蓋大系統</div><div class="d">先把組織圖、Registry 全設計出來，結果沒一個真的在跑。先做一個 Agent 到底，再談系統。</div></div>
+      <div class="icard"><div class="t">2 知識只留在對話裡</div><div class="d">聊得很好，換新對話全部重來。有結論就落地成檔案，標準是「新對話讀了檔案就能接手」。</div></div>
+      <div class="icard"><div class="t">3 綁死單一平台</div><div class="d">全部塞在某一家 AI 或某個 App，哪天要搬走拿不回來。重要資料放自己掌控的 Obsidian／GitHub。</div></div>
+      <div class="icard"><div class="t">4 Skill 寫得太模糊</div><div class="d">「幫我寫貼文」每次結果都不一樣。SOP 要具體到格式、字數、語氣、範例，AI 才穩定。</div></div>
+      <div class="icard"><div class="t">5 少了觸發機制</div><div class="d">做好了卻還要每天手動開，就不算自動化。一定要有 Workflow 的「觸發」那一步，它才會自己跑。</div></div>
+    </div>
+
+    <hr class="cdiv">
+    <div class="csec"><h2>💡 八、最重要的一課：心態</h2>
+      <div class="sub">上面五個坑裡最傷的是第一個，值得單獨講一次——它決定你這套系統是真的跑起來，還是停在紙上。</div>
+    </div>
     <div class="keylesson">
       <h4>先把一個 Agent 做到底，不要一開始就寫大架構</h4>
       <p>很多人一開始就想把整套系統的組織圖、Registry、Knowledge Graph 都設計出來——但沒有真實案例撐著的架構文件，寫起來很有成就感，最後卻常常變成一份沒人真的照做的規劃書。</p>
